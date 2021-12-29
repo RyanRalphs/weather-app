@@ -1,0 +1,133 @@
+
+
+
+body {
+    color: #333333;
+    font-family: arial;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.weather {
+    flex-grow: 1;
+        position: relative;
+        text-align: center;
+        color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: absolute;
+    font-size: 16px;
+    bottom: 8px;
+    left: 16px;
+  }
+  
+  /* Top left text */
+  .top-left {
+    position: absolute;
+    font-size: 160%;
+    top: 8px;
+    color: #333333;
+    left: 16px;
+  }
+  
+  /* Top right text */
+  .top-right {
+    position: absolute;
+    font-size: 160%;
+    color: #333333;
+    top: 8px;
+    right: 16px;
+  }
+  
+  /* Bottom right text */
+  .bottom-right {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+  }
+  
+  /* Centered text */
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+footer {
+    color: #888888;
+    border: 1px solid #eeeeee;
+    margin-top: 16px;
+    padding: 16px 0;
+}
+
+header {
+    margin-top: 16px;
+    margin-bottom: 48px;
+}
+
+input {
+  border: 1px solid #cccccc;
+  padding: 8px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #888888;
+  background: #888888;
+  color: white;
+  padding: 8px;
+}
+
+h1 {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+header a {
+    color: #888888;
+    margin-right: 16px;
+    text-decoration: none;
+}
+
+.weatherImage {
+    width: 100%;
+    opacity: 50%;
+}
+
+svg {
+  height: 45px;
+  color: #D14009;
+  transition: 1s ease-out;
+  animation: rotation 8s infinite linear;
+}
+
+.fa-secondary {
+  fill: #FC9601;
+  opacity: .8;
+  transition: fill 2s ease-out;
+}
+
+svg:hover {
+  color: #FFCC33;
+}
+.fa-secondary:hover {
+  fill: #FFE484;
+}
+
+@keyframes rotation {
+   from
+  {transform: rotate(0deg)}
+   to
+  {transform: rotate(359deg)}
+}
