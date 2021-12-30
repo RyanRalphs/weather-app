@@ -58,7 +58,7 @@ app.get('/weather', (req, res) => {
     let address = req.query.address
     address = address.toLowerCase()
 
-    geocode.forwardGeocode(address, (errorWithGeocoding, { latitude, longitude } = {}) => {
+    geocode.forwardGeocode(req.query.address, (errorWithGeocoding, { latitude, longitude } = {}) => {
         if (errorWithGeocoding) {
             return res.send({ errorWithGeocoding })
         } else {
@@ -102,6 +102,11 @@ app.get('/weather/api', (req, res) => {
             error: 'You must provide an address.'
         })
     }
+
+    let address = req.query.address
+    address = address.toLowerCase()
+
+
     geocode.forwardGeocode(req.query.address, (errorWithGeocoding, { latitude, longitude } = {}) => {
         if (errorWithGeocoding) {
             return res.send({ errorWithGeocoding })
@@ -110,14 +115,28 @@ app.get('/weather/api', (req, res) => {
                 if (errorWithForecast) {
                     return res.send({ errorWithForecast })
                 } else {
-                    res.send({
-                        latitude,
-                        longitude,
-                        forecastInformation,
-                        name: 'Ryan',
-                        forecast: forecastInformation.weather_descriptions[0],
-                        icon: forecastInformation.icon,
-                        address: req.query.address.charAt(0).toUpperCase() + req.query.address.slice(1)
+                    photos.getPhotoReference(address, latitude, longitude, (errorWithPhoto, photoReference) => {
+                        if (errorWithPhoto) {
+                            return res.send({ errorWithPhoto })
+                        } else {
+                            photos.getPhotoUrl(photoReference, (errorWithUrl, photoUrl) => {
+                                if (errorWithUrl) {
+                                    return res.send({ errorWithUrl })
+                                }
+                                else {
+                                    res.send({
+                                        latitude,
+                                        longitude,
+                                        forecastInformation,
+                                        name: 'Ryan',
+                                        forecast: forecastInformation.weather_descriptions[0],
+                                        icon: forecastInformation.icon,
+                                        address: req.query.address.charAt(0).toUpperCase() + req.query.address.slice(1),
+                                        photoUrl
+                                    })
+                                }
+                            })
+                        }
                     })
                 }
             })

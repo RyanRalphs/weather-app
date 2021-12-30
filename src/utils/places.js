@@ -21,7 +21,7 @@ const getPhotoReference = (searchQuery, lat, long, callback) => {
             )
         })
         .catch((error) => {
-            callback(error, undefined)
+            callback('Could not find a photo for this location - Currently only supports locations such as Texas, Oswestry etc.', undefined)
         });
 }
 
