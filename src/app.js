@@ -58,41 +58,34 @@ app.get('/weather', (req, res) => {
     let address = req.query.address
     address = address.toLowerCase()
 
-    geocode.forwardGeocode(req.query.address, (errorWithGeocoding, { latitude, longitude } = {}) => {
-        if (errorWithGeocoding) {
-            return res.send({ errorWithGeocoding })
-        } else {
-            forecast.forecast(latitude, longitude, (errorWithForecast, forecastInformation) => {
-                if (errorWithForecast) {
-                    return res.send({ errorWithForecast })
-                } else {
-                    photos.getPhotoReference(address, latitude, longitude, (errorWithPhoto, photoReference) => {
-                        if (errorWithPhoto) {
-                            return res.send({ errorWithPhoto })
-                        } else {
-                            photos.getPhotoUrl(photoReference, (errorWithUrl, photoUrl) => {
-                                if (errorWithUrl) {
-                                    return res.send({ errorWithUrl })
-                                } else {
-                                    res.render('weather', {
-                                        title: "Weather",
-                                        latitude,
-                                        longitude,
-                                        forecastInformation,
-                                        name: 'Ryan',
-                                        forecast: forecastInformation.weather_descriptions[0],
-                                        address: address.charAt(0).toUpperCase() + address.slice(1),
-                                        photoUrl
-                                    })
-                                }
-                            })
-                        }
+    geocode.forwardGeocode(address).then(({ longitude, latitude }) => {
+        forecast.forecast(latitude, longitude).then((forecastInformation) => {
+            photos.getPhotoReference(address, latitude, longitude).then((photoRef) => {
+                photos.getPhotoUrl(photoRef).then((photoUrl) => {
+                    res.render('weather', {
+                        title: "Weather",
+                        latitude,
+                        longitude,
+                        forecastInformation,
+                        name: 'Ryan',
+                        forecast: forecastInformation.weather_descriptions[0],
+                        address: address.charAt(0).toUpperCase() + address.slice(1),
+                        photoUrl
                     })
-                }
+                }).catch(( errorWithPhotoUrl ) => {
+                     res.send({ errorWithPhotoUrl })
+                })
+            }).catch((errorWithPhoto) => {
+                 res.send({ errorWithPhoto })
             })
-        }
+        }).catch((errorWithForecast) => {
+             res.send({ errorWithForecast })
+        })
+    }).catch((errorWithGeocoding) => {
+         res.send({ errorWithGeocoding })
     })
 })
+
 
 
 
@@ -102,45 +95,34 @@ app.get('/weather/api', (req, res) => {
             error: 'You must provide an address.'
         })
     }
-
     let address = req.query.address
     address = address.toLowerCase()
 
-
-    geocode.forwardGeocode(req.query.address, (errorWithGeocoding, { latitude, longitude } = {}) => {
-        if (errorWithGeocoding) {
-            return res.send({ errorWithGeocoding })
-        } else {
-            forecast.forecast(latitude, longitude, (errorWithForecast, forecastInformation) => {
-                if (errorWithForecast) {
-                    return res.send({ errorWithForecast })
-                } else {
-                    photos.getPhotoReference(address, latitude, longitude, (errorWithPhoto, photoReference) => {
-                        if (errorWithPhoto) {
-                            return res.send({ errorWithPhoto })
-                        } else {
-                            photos.getPhotoUrl(photoReference, (errorWithUrl, photoUrl) => {
-                                if (errorWithUrl) {
-                                    return res.send({ errorWithUrl })
-                                }
-                                else {
-                                    res.send({
-                                        latitude,
-                                        longitude,
-                                        forecastInformation,
-                                        name: 'Ryan',
-                                        forecast: forecastInformation.weather_descriptions[0],
-                                        icon: forecastInformation.icon,
-                                        address: req.query.address.charAt(0).toUpperCase() + req.query.address.slice(1),
-                                        photoUrl
-                                    })
-                                }
-                            })
-                        }
+    geocode.forwardGeocode(address).then(({ longitude, latitude }) => {
+        forecast.forecast(latitude, longitude).then((forecastInformation) => {
+            photos.getPhotoReference(address, latitude, longitude).then((photoRef) => {
+                photos.getPhotoUrl(photoRef).then((photoUrl) => {
+                     res.send({
+                        title: "Weather",
+                        latitude,
+                        longitude,
+                        forecastInformation,
+                        name: 'Ryan',
+                        forecast: forecastInformation.weather_descriptions[0],
+                        address: address.charAt(0).toUpperCase() + address.slice(1),
+                        photoUrl
                     })
-                }
+                }).catch(( errorWithPhotoUrl ) => {
+                     res.send({ errorWithPhotoUrl })
+                })
+            }).catch((errorWithPhoto) => {
+                 res.send({ errorWithPhoto })
             })
-        }
+        }).catch((errorWithForecast) => {
+             res.send({ errorWithForecast })
+        })
+    }).catch((errorWithGeocoding) => {
+         res.send({ errorWithGeocoding })
     })
 })
 

@@ -5,7 +5,8 @@ require('dotenv').config()
 const apiKey = process.env.GOOGLE_API_KEY
 
 
-const getPhotoReference = (searchQuery, lat, long, callback) => {
+const getPhotoReference = (searchQuery, lat, long) => {
+    return new Promise((resolve, reject) => {
     client
         .textSearch({
             params: {
@@ -16,16 +17,17 @@ const getPhotoReference = (searchQuery, lat, long, callback) => {
             timeout: 1000,
         })
         .then((response) => {
-            callback(undefined,
-                response.data.results[0].photos[0].photo_reference
-            )
+            resolve(response.data.results[0].photos[0].photo_reference)
         })
         .catch((error) => {
-            callback('Could not find a photo for this location - Currently only supports locations such as Texas, Oswestry etc.', undefined)
+            reject('Could not find a photo for this location - Currently only supports locations such as Texas, Oswestry etc.')
         });
+})
 }
 
-const getPhotoUrl = (photoReference, callback) => {
+const getPhotoUrl = (photoReference) => {
+    return new Promise((resolve, reject) => {
+
     const url = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&chunked_encoding=true&photo_reference=' + decodeURIComponent(photoReference) + '&key=' + decodeURIComponent(apiKey)
     request({
         url,
@@ -33,18 +35,14 @@ const getPhotoUrl = (photoReference, callback) => {
     },
         (error, body) => {
             if (error) {
-                callback('Something went wrong trying to fetch the mirror from Google.', undefined)
+                reject('Something went wrong trying to fetch the mirror from Google.')
             } else if (body.error) {
-                callback(
-                    {
-                        error: body.error.info,
-                        undefined
-                    }
-                )
+                reject(body.error.info)
             } else {
-                callback(undefined, 'https://lh3.googleusercontent.com' + body.client._httpMessage.path)
+                resolve('https://lh3.googleusercontent.com' + body.client._httpMessage.path)
             }
         })
+})
 }
 
 module.exports = {
