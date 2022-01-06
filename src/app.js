@@ -59,33 +59,27 @@ app.get('/weather', (req, res) => {
     address = address.toLowerCase()
 
     geocode.forwardGeocode(address).then(async ({ longitude, latitude }) => {
-        try {
-            const forecastInformation = await forecast.forecast(latitude, longitude)
-            try {
-                const photoRef = await photos.getPhotoReference(address, latitude, longitude)
-                try {
-                    const photoUrl = await photos.getPhotoUrl(photoRef)
-                    res.render('weather', {
-                        title: "Weather",
-                        latitude,
-                        longitude,
-                        forecastInformation,
-                        name: 'Ryan',
-                        forecast: forecastInformation.weather_descriptions[0],
-                        address: address.charAt(0).toUpperCase() + address.slice(1),
-                        photoUrl
-                    })
-                } catch (errorWithPhotoUrl) {
-                    res.send({ errorWithPhotoUrl })
-                }
-            } catch (errorWithPhoto) {
-                res.send({ errorWithPhoto })
-            }
-        } catch (errorWithForecast) {
-            res.send({ errorWithForecast })
-        }
+        const forecastInformation = await forecast.forecast(latitude, longitude)
+        const photoRef = await photos.getPhotoReference(address, latitude, longitude)
+        const photoUrl = await photos.getPhotoUrl(photoRef)
+        res.render('weather', {
+            title: "Weather",
+            latitude,
+            longitude,
+            forecastInformation,
+            name: 'Ryan',
+            forecast: forecastInformation.weather_descriptions[0],
+            address: address.charAt(0).toUpperCase() + address.slice(1),
+            photoUrl
+        })
+    }).catch((errorWithPhotoUrl) => {
+        return res.send({ error: errorWithPhotoUrl })
+    }).catch((errorWithPhoto) => {
+        return res.send({ error: errorWithPhoto })
+    }).catch((errorWithForecast) => {
+        return res.send({ error: errorWithForecast })
     }).catch((errorWithGeocoding) => {
-        res.send({ errorWithGeocoding })
+        return res.send({ error: errorWithGeocoding })
     })
 })
 
@@ -102,35 +96,30 @@ app.get('/weather/api', (req, res) => {
     address = address.toLowerCase()
 
     geocode.forwardGeocode(address).then(async ({ longitude, latitude }) => {
-        try {
-            const forecastInformation = await forecast.forecast(latitude, longitude)
-            try {
-                const photoRef = await photos.getPhotoReference(address, latitude, longitude)
-                try {
-                    const photoUrl = await photos.getPhotoUrl(photoRef)
-                    res.send({
-                        title: "Weather",
-                        latitude,
-                        longitude,
-                        forecastInformation,
-                        name: 'Ryan',
-                        forecast: forecastInformation.weather_descriptions[0],
-                        address: address.charAt(0).toUpperCase() + address.slice(1),
-                        photoUrl
-                    })
-                } catch (errorWithPhotoUrl) {
-                    res.send({ errorWithPhotoUrl })
-                }
-            } catch (errorWithPhoto) {
-                res.send({ errorWithPhoto })
-            }
-        } catch (errorWithForecast) {
-            res.send({ errorWithForecast })
-        }
+        const forecastInformation = await forecast.forecast(latitude, longitude)
+        const photoRef = await photos.getPhotoReference(address, latitude, longitude)
+        const photoUrl = await photos.getPhotoUrl(photoRef)
+        res.send({
+            title: "Weather",
+            latitude,
+            longitude,
+            forecastInformation,
+            name: 'Ryan',
+            forecast: forecastInformation.weather_descriptions[0],
+            address: address.charAt(0).toUpperCase() + address.slice(1),
+            photoUrl
+        })
+    }).catch((errorWithPhotoUrl) => {
+        return res.send({ error: errorWithPhotoUrl })
+    }).catch((errorWithPhoto) => {
+        return res.send({ error: errorWithPhoto })
+    }).catch((errorWithForecast) => {
+        return res.send({ error: errorWithForecast })
     }).catch((errorWithGeocoding) => {
-        res.send({ errorWithGeocoding })
+        return res.send({ error: errorWithGeocoding })
     })
 })
+
 
 
 
