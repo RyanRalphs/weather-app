@@ -58,10 +58,13 @@ app.get('/weather', (req, res) => {
     let address = req.query.address
     address = address.toLowerCase()
 
-    geocode.forwardGeocode(address).then(({ longitude, latitude }) => {
-        forecast.forecast(latitude, longitude).then((forecastInformation) => {
-            photos.getPhotoReference(address, latitude, longitude).then((photoRef) => {
-                photos.getPhotoUrl(photoRef).then((photoUrl) => {
+    geocode.forwardGeocode(address).then(async ({ longitude, latitude }) => {
+        try {
+            const forecastInformation = await forecast.forecast(latitude, longitude)
+            try {
+                const photoRef = await photos.getPhotoReference(address, latitude, longitude)
+                try {
+                    const photoUrl = await photos.getPhotoUrl(photoRef)
                     res.render('weather', {
                         title: "Weather",
                         latitude,
@@ -72,17 +75,17 @@ app.get('/weather', (req, res) => {
                         address: address.charAt(0).toUpperCase() + address.slice(1),
                         photoUrl
                     })
-                }).catch(( errorWithPhotoUrl ) => {
-                     res.send({ errorWithPhotoUrl })
-                })
-            }).catch((errorWithPhoto) => {
-                 res.send({ errorWithPhoto })
-            })
-        }).catch((errorWithForecast) => {
-             res.send({ errorWithForecast })
-        })
+                } catch (errorWithPhotoUrl) {
+                    res.send({ errorWithPhotoUrl })
+                }
+            } catch (errorWithPhoto) {
+                res.send({ errorWithPhoto })
+            }
+        } catch (errorWithForecast) {
+            res.send({ errorWithForecast })
+        }
     }).catch((errorWithGeocoding) => {
-         res.send({ errorWithGeocoding })
+        res.send({ errorWithGeocoding })
     })
 })
 
@@ -98,11 +101,14 @@ app.get('/weather/api', (req, res) => {
     let address = req.query.address
     address = address.toLowerCase()
 
-    geocode.forwardGeocode(address).then(({ longitude, latitude }) => {
-        forecast.forecast(latitude, longitude).then((forecastInformation) => {
-            photos.getPhotoReference(address, latitude, longitude).then((photoRef) => {
-                photos.getPhotoUrl(photoRef).then((photoUrl) => {
-                     res.send({
+    geocode.forwardGeocode(address).then(async ({ longitude, latitude }) => {
+        try {
+            const forecastInformation = await forecast.forecast(latitude, longitude)
+            try {
+                const photoRef = await photos.getPhotoReference(address, latitude, longitude)
+                try {
+                    const photoUrl = await photos.getPhotoUrl(photoRef)
+                    res.send({
                         title: "Weather",
                         latitude,
                         longitude,
@@ -112,17 +118,17 @@ app.get('/weather/api', (req, res) => {
                         address: address.charAt(0).toUpperCase() + address.slice(1),
                         photoUrl
                     })
-                }).catch(( errorWithPhotoUrl ) => {
-                     res.send({ errorWithPhotoUrl })
-                })
-            }).catch((errorWithPhoto) => {
-                 res.send({ errorWithPhoto })
-            })
-        }).catch((errorWithForecast) => {
-             res.send({ errorWithForecast })
-        })
+                } catch (errorWithPhotoUrl) {
+                    res.send({ errorWithPhotoUrl })
+                }
+            } catch (errorWithPhoto) {
+                res.send({ errorWithPhoto })
+            }
+        } catch (errorWithForecast) {
+            res.send({ errorWithForecast })
+        }
     }).catch((errorWithGeocoding) => {
-         res.send({ errorWithGeocoding })
+        res.send({ errorWithGeocoding })
     })
 })
 
