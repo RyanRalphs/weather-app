@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   weatherapp:
-    image: ryan/weather-app
+    image: sneally/weatherapp
     ports:
       - 80:3000
     env_file:
