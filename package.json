@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "local": "nodemon src/app.js -e js,hbs"
+    "start": "node src/index.js",
+    "local": "nodemon src/index.js -e js,hbs",
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +19,8 @@
     "postman-request": "^2.88.1-postman.30"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.0"
   }
 }
