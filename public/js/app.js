@@ -1,7 +1,9 @@
+const socket = io()
 const messageOne = document.querySelector('#loadingMessage')
 const weatherSearch = document.querySelector('form')
 const search = document.querySelector('input')
 var spinner = document.querySelector('#spinner');
+
 
 
 var element = document.getElementById('searchButton')
