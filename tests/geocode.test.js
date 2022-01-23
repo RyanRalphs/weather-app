@@ -1,5 +1,5 @@
 jest.mock("../src/utils/geocode.js");
-const mockGeocode = jest.fn().mockImplementation(async (address) => {
+const mockForwardGeocode = jest.fn().mockImplementation(async (address) => {
   return new Promise((resolve, reject) => {
     address === "Oswestry"
       ? resolve({ latitude: 52.8598, longitude: -3.0538 })
@@ -9,14 +9,26 @@ const mockGeocode = jest.fn().mockImplementation(async (address) => {
   });
 });
 
+const mockReverseGeocode = jest.fn().mockImplementation(async (lat, long) => {
+  return new Promise((resolve, reject) => {
+    typeof lat === "number" && typeof long === "number"
+      ? resolve({
+          id: "place.9835687462513040",
+          wikidata: "Q1009221",
+          text: "Oswestry",
+        })
+      : reject("Unable to connect to the location API.");
+  });
+});
+
 test("I can forward geocode an address", async () => {
-  await mockGeocode("Oswestry").then((result) => {
+  await mockForwardGeocode("Oswestry").then((result) => {
     expect(result).toStrictEqual({ latitude: 52.8598, longitude: -3.0538 });
   });
 });
 
 test("I get an error if I do not provide a valid address", async () => {
-  await mockGeocode("!")
+  await mockForwardGeocode("!")
     .then()
     .catch((error) => {
       expect(error).toBe(
@@ -24,3 +36,20 @@ test("I get an error if I do not provide a valid address", async () => {
       );
     });
 });
+
+
+test("I can get an address name from providin coords", async () => {
+  await mockReverseGeocode(52.923, -3.0069907).then((result) => {
+    expect(result).toStrictEqual({
+      id: "place.9835687462513040",
+      wikidata: "Q1009221",
+      text: "Oswestry",
+    })
+  })
+})
+
+test("I get an error if I don't provide coords", async () => {
+  await mockReverseGeocode('str').then().catch((error) => {
+    expect(error).toBe('Unable to connect to the location API.')
+  })
+})
