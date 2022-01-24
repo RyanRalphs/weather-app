@@ -6,7 +6,7 @@ var spinner = document.querySelector("#spinner");
 const searchByLocation = document.querySelector("#searchByLocation");
 
 function autoSearch(address) {
- location.assign("/weather?address=" + encodeURIComponent(address));
+  location.assign("/weather?address=" + encodeURIComponent(address));
 }
 
 searchByLocation.addEventListener("click", (event) => {
@@ -15,20 +15,23 @@ searchByLocation.addEventListener("click", (event) => {
     return alert("Your browser is too old.");
   }
 
-
   messageOne.textContent = "Finding by location...";
-  navigator.geolocation.getCurrentPosition(({coords}) => {
-    socket.emit("searchByLocation", {
+  navigator.geolocation.getCurrentPosition(({ coords }) => {
+    socket.emit(
+      "searchByLocation",
+      {
         latitude: coords.latitude,
-            longitude: coords.longitude
-    }, (error) => {
-      if (error) {
-        return console.log(error);
+        longitude: coords.longitude,
+      },
+      (error) => {
+        if (error) {
+          return console.log(error);
+        }
       }
-    });
+    );
   });
 
-  socket.on("reserveGeocode", ({address}) => {
+  socket.on("reserveGeocode", ({ address }) => {
     autoSearch(address.text);
   });
 });
@@ -37,6 +40,7 @@ var element = document.getElementById("searchButton");
 if (element) {
   weatherSearch.addEventListener("submit", (event) => {
     event.preventDefault();
+    console.log('hi')
     messageOne.textContent = "Finding your weather...";
     const address = search.value;
     fetch("/weather/api?address=" + encodeURIComponent(address)).then(
@@ -51,7 +55,6 @@ if (element) {
           } else if (data.errorWithUrl) {
             return (messageOne.textContent = data.errorWithUrl);
           }
-          spinner.style.display = "block";
           location.assign("/weather?address=" + encodeURIComponent(address));
         });
       }
