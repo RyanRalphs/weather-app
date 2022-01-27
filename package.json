@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "local": "nodemon src/index.js -e js,hbs",
+    "local": "nodemon src/index.js -e js,hbs,css",
     "test": "jest --watch"
   },
   "keywords": [],

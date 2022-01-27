@@ -4,19 +4,31 @@
 body {
     color: #333333;
     font-family: arial;
-    max-width: 650px;
-    float: left;
+    max-width: 100%;
     background-color: #0a0041;
     margin: 0 auto;
     padding: 0 16px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     min-height: 100vh;
 }
 
-.main {
-  flex-grow: 1;
+.loadingMessage{
+  color: white;
 }
+
+.weather-body {
+  height: 350px;
+  background-color: #333333;
+  margin-top: 10%;
+  width: 40%;
+  float: right;
+  display: flex;
+  padding: 40px;
+  margin-right: 4%;
+  flex-direction: column;
+}
+
 
 .links {
   width: fit-content;
@@ -26,14 +38,15 @@ body {
 }
 
 .main-body {
-  height: 480px;
+  height: 350px;
   background-color: #333333;
-  justify-content: left;
-  align-content:flex-start;
-  position:sticky;
+  margin-top: 10%;
+  width: 40%;
+  float: left;
+  justify-content: center;
+  align-content:center;
   display: flex;
   padding: 40px;
-
   margin-bottom: 15%;
   flex-direction: column;
   
@@ -132,8 +145,6 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 .weather {
     flex-grow: 1;
         position: relative;
-        text-align: center;
-        color: white;
 }
 
 /* Bottom left text */
@@ -143,14 +154,14 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     bottom: 8px;
     left: 16px;
   }
-  
-  /* Top left text */
+  /* Top right text */
   .top-left {
     position: absolute;
     font-size: 160%;
-    top: 8px;
     color: #333333;
+    top: 8px;
     left: 16px;
+    z-index: 100;
   }
   
   /* Top right text */
@@ -216,6 +227,7 @@ header a {
 }
 
 .weatherImage {
-    width: 100%;
-    opacity: 50%;
+    max-height: 350px;
+    width: max-content;
+    opacity: 70%;
 }

@@ -8,10 +8,13 @@
    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<body>
-   <div class="main">
-      {{>header}}
+<div class="weather-body" style="display: none;">
+<div class="card">
 
+{{>weather}}
+
+   </div>
+   </div>
       
 <div class="main-body">
 <div class="card" >
@@ -25,9 +28,8 @@
    </p>
 
 
-   <p class="bottom-card">
-     Give it a try!
-   </p>
+   <p id="loadingMessage" class="bottom-card"></p>
+
 </div>
 
  <div class="form-box">
@@ -35,42 +37,15 @@
          <input class="form-input" type="text" placeholder="Location...">
          <button class="btn" id="searchButton" type="submit">Search</button>
          <button class="btn" id="searchByLocation">Search By Location</button>
-         <p id="loadingMessage"></p>
 
       </form>
       </div>
 
-</div>
 
 
-<div class="main-body">
-<div class="card" >
-   <h2 class="index-header" >Weather details at your fingertips!</h2>
-   <p class="weather-app-info">
 
 
-      This app was made using Mapbox, Weatherstack, Google Places, Socket.io, Node and Express.
-      It's a noDB App that makes asyncronous requests to the 3 APIs to forward (or reserve) geocode your input,
-      poll for weather data and grab an image of the location requested. 
-   </p>
 
-
-   <p class="bottom-card">
-     Give it a try!
-   </p>
-</div>
-
- <div class="form-box">
-      <form action="">
-         <input class="form-input" type="text" placeholder="Location...">
-         <button class="btn" id="searchButton" type="submit">Search</button>
-         <button class="btn" id="searchByLocation">Search By Location</button>
-         <p id="loadingMessage"></p>
-
-      </form>
-      </div>
-
-</div>
      
 
    </div>
